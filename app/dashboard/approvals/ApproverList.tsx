@@ -133,10 +133,8 @@ export default function ApproverList() {
             </div>
 
             <div style={{ marginBottom: '1.5rem' }}>
-              <Link href={`/opportunities/${selectedOpp.id}`}>
-                <button className="btn-primary" style={{ width: '100%', backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid var(--border-color)' }}>
-                  View Full Opportunity Scorecard
-                </button>
+              <Link href={`/opportunities/${selectedOpp.id}`} className="btn-primary" style={{ display: 'block', textAlign: 'center', width: '100%', backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid var(--border-color)', textDecoration: 'none', padding: '0.5rem 1rem' }}>
+                View Full Opportunity Scorecard
               </Link>
             </div>
 
