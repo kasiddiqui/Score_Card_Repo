@@ -13,17 +13,30 @@ export default function ApproverList() {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
-    fetch('/api/users').then(res => res.json()).then(data => {
-      setUsers(data);
-      if (data.length > 0) setActiveUser(data.find((u: any) => u.role === 'SBU_Manager') || data[0]);
-    });
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setUsers(data);
+          if (data.length > 0) setActiveUser(data.find((u: any) => u.role === 'SBU_Manager') || data[0]);
+        } else {
+          console.error("Users API error:", data);
+        }
+      });
   }, []);
 
   useEffect(() => {
     if (activeUser) {
       fetch(`/api/opportunities/pending?role=${activeUser.role}&sbu=${activeUser.sbu}`)
         .then(res => res.json())
-        .then(data => setPendingOpps(data || []));
+        .then(data => {
+          if (Array.isArray(data)) {
+            setPendingOpps(data);
+          } else {
+            console.error("Pending API error:", data);
+            setPendingOpps([]);
+          }
+        });
     }
   }, [activeUser]);
 

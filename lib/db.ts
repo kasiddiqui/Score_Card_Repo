@@ -6,9 +6,9 @@ const createPrismaClient = () => {
   const url = process.env.TURSO_DATABASE_URL;
   const authToken = process.env.TURSO_AUTH_TOKEN;
 
-  // If we're building and the URL is missing, return a dummy client to avoid build crashes.
-  // The 'lib/db.ts' is often imported during Next.js build-time page collection.
-  if (!url || url === 'undefined') {
+  // Ensure we have a valid URL string that isn't empty or the literal string 'undefined'
+  if (!url || url === 'undefined' || url.trim() === '') {
+    console.warn("Database URL is missing or invalid. Falling back to default PrismaClient.");
     return new PrismaClient();
   }
 

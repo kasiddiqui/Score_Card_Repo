@@ -6,7 +6,20 @@ export default function ProgressPage() {
   const [opps, setOpps] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('/api/opportunities/progress').then(r => r.json()).then(data => setOpps(data || []));
+    fetch('/api/opportunities/progress')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setOpps(data);
+        } else {
+          console.error("API did not return an array:", data);
+          setOpps([]);
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        setOpps([]);
+      });
   }, []);
 
   return (
