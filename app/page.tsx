@@ -19,10 +19,8 @@ export default function Home() {
         <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
           Evaluate, score, and track your strategic opportunities using our standard Opportunity Scoring Model framework.
         </p>
-        <Link href="/submit">
-          <button className="btn-primary" style={{ fontSize: '1.1rem', padding: '1rem 2rem' }}>
-            Submit an Idea
-          </button>
+        <Link href="/submit" className="btn-primary" style={{ display: 'inline-block', fontSize: '1.1rem', padding: '1rem 2rem', textDecoration: 'none' }}>
+          Submit an Idea
         </Link>
       </div>
 
