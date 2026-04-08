@@ -1,0 +1,65 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("TURSO_DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  role         String        // "Submitter", "SBU_Manager", "PMO", "Top_Management"
+  sbu          String        // e.g. "Cardiology", "Wound-Care", "All"
+  opportunities Opportunity[] 
+  approvalLogs  ApprovalLog[]
+}
+
+model Opportunity {
+  id                  String   @id @default(uuid())
+  title               String
+  description         String
+  submitterId         String
+  submitter           User     @relation(fields: [submitterId], references: [id])
+  sbu                 String
+  
+  // Categorical Data (String identifiers for ratings)
+  awarenessRating     String?
+  entryBarriersRating String?
+  supplierRating      String?
+  grossMarginRating   String?
+  tenderFeasibility   String?
+  privateMarketRating String?
+  businessDevRating   String?
+  regulatoryRating    String?
+  productComplexity   String?
+  operationalComplex  String?
+  targetGrowthRating  String?
+  timeToMarketRating  String?
+
+  calculatedScore     Float    @default(0.0)
+  workflowStatus      String   @default("Draft") // "Draft", "Pending_SBU", "Pending_PMO", "Pending_Top_Management", "Approved", "Rejected"
+  
+  // Execution tracking
+  executionOwner      String?
+  dueDate             DateTime?
+  executionStatus     String   @default("Not_Started")
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  approvalLogs        ApprovalLog[]
+}
+
+model ApprovalLog {
+  id            String      @id @default(uuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  approverId    String
+  approver      User        @relation(fields: [approverId], references: [id])
+  action        String      // "Approve", "Reject", "Return"
+  comments      String?
+  createdAt     DateTime    @default(now())
+}
